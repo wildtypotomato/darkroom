@@ -1,12 +1,26 @@
 # Darkroom
 
-A photo archival skill for [Hermes Agent](https://github.com/NousResearch/hermes-agent) that turns your accumulated photos into designed editorial artifacts -- a 9:16 MP4 recap video and a companion A3 PDF poster -- delivered straight to Telegram.
+A [Hermes Agent](https://github.com/NousResearch/hermes-agent) skill that turns your phone photos into something worth keeping -- a 9:16 recap video and a printed-feel A3 poster, delivered to Telegram.
 
-Drop photos into chat at whatever pace suits you -- daily, after a trip, over weeks. When you're ready, trigger `/darkroom wrap` and Darkroom clusters them by time and similarity, writes editorial captions, scores ambient music, renders both formats, and runs an anti-slop critique loop before delivery.
+Built for the **Hermes Creative Hackathon**.
 
-The design standard is a *Monocle* feature spread, not a year-in-review infographic. Every frame teaches the eye where to look. Hierarchy is built with scale and weight; colour is the last lever, never the first. If a designer cannot tell this was generated, we passed.
+Most "year in review" tools produce the same purple-gradient card layout. Darkroom goes the other way: the references directory contains 10 design rules, 34 named anti-patterns, and five locked style presets sourced from Vignelli, Lupton, and actual editorial design textbooks. The CRITIQUE stage evaluates every render against that rubric before anything gets delivered. The goal is output that looks like it came from a design studio, not a template.
 
-> Over time, individual wraps accumulate -- a future update will compile them into a single book.
+You drop photos into chat over days or weeks. When you want a wrap, `/darkroom wrap` clusters them by time and visual similarity, writes captions, picks a music bed, renders both formats, critiques the result, and sends it back.
+
+> Individual wraps accumulate over time -- a future update will compile them into a single book.
+
+## Why Hermes
+
+Darkroom works without Hermes (sequential mode, local SQLite, manual file paths), but Hermes is where the architecture actually makes sense.
+
+The main bottleneck in the pipeline is captioning and music generation -- they're independent and both involve API calls. On Hermes, `delegate_task` fans these out as parallel sub-agents, which roughly halves the wall time. Without that, the pipeline runs them one after the other and you're just waiting.
+
+The bigger thing is ingestion. On Hermes, photos arrive through Telegram (or any of the 17 supported channels) and land in cross-session FTS5 memory automatically. That means `/darkroom wrap --since 30d` can pull photos you sent three weeks ago in a completely different conversation. Off Hermes, you're passing file paths manually and there's no memory between runs.
+
+And then there's scheduling. `/darkroom schedule "every Sunday evening"` registers a Hermes NL cron that auto-runs the pipeline and delivers to the same chat thread. It turns Darkroom from a tool you have to remember to use into something that just shows up with your week's photos, formatted and ready.
+
+The last piece is the one I'm most interested in: after a few wraps, if the agent notices you keep shooting the same kind of subject (food, architecture, pets), it writes a new sub-skill to disk that handles that pattern directly on future runs. Skills that write skills. That only works on Hermes because it needs the skill filesystem and the agent runtime to load new skills at execution time.
 
 ## Install
 
@@ -122,26 +136,14 @@ Five locked presets, each derived from a canonical design source. Full specs in 
 | `editorial-grid-authority` | Caldwell & Zappaterra | Dominant image, proportional grid, paced magazine spreads |
 | `editorial-typographic` | Ellen Lupton | Baseline-aware grid, serif body, one disciplined display partner |
 
-## Design Philosophy
+## Design References
 
-Darkroom ships with an opinionated design system documented across four reference files:
+The `references/` directory is where most of the opinionated decisions live:
 
-- **`references/design-philosophy.md`** -- 10 universal rules drawn from Vignelli, Lupton, Refactoring UI, and Caldwell/Zappaterra. The floor under every artifact.
-- **`references/anti_slop.md`** -- 34 named anti-patterns across visual, typographic, caption, and motion domains. The Gallery of Shame that CRITIQUE evaluates against.
-- **`references/captions.md`** -- Caption writing guide with 5 voice modes, 8 worked examples, length budgets, and a 15-point critique checklist.
-- **`references/motion.md`** -- Motion and pacing specification for video output. Timing vocabulary, camera movement rules, transition grammar, and the five-act pacing structure.
-
-The creative standard in short: two typefaces maximum, one ink plus one accent, white space is structural, captions are sentences that stand alone without the image, and constraint carries personality.
-
-## Hermes Integration
-
-Five capabilities that light up on Hermes and degrade gracefully elsewhere:
-
-1. **Native media gateway** -- Photos, voice memos, and screenshots arrive pre-indexed from Telegram (and 16 other platforms). Off Hermes, provide file paths manually.
-2. **`delegate_task` fan-out** -- CAPTION and SCORE run as parallel sub-agents. Off Hermes, sequential execution.
-3. **FTS5 cross-session memory** -- RECALL queries span sessions. Off Hermes, local SQLite FTS5 only.
-4. **Natural language cron** -- `/darkroom schedule "every Sunday evening"` registers automatic wraps. Off Hermes, manual invocation only.
-5. **Self-evolving skills** -- After repeated use, the agent authors specialised sub-skills to disk for detected patterns. Off Hermes, taste preferences persist but sub-skill authoring is skipped.
+- **`design-philosophy.md`** -- 10 rules sourced from Vignelli Canon, Thinking with Type (Lupton), Refactoring UI, and Editorial Design (Caldwell & Zappaterra). These are the hard constraints -- two typefaces max, no gradients, captions must read without the image.
+- **`anti_slop.md`** -- 34 named anti-patterns. Gradient text, AI colour palettes, Ken Burns on every frame, "a beautiful moment captured in time" captions. CRITIQUE checks renders against this list.
+- **`captions.md`** -- Five caption voices (intimate, reflective, wry, documentary, contextual), worked before/after examples, and length budgets per format.
+- **`motion.md`** -- Timing, camera movement, transitions, and pacing for the video output. Includes Remotion implementation patterns.
 
 ## Project Structure
 
