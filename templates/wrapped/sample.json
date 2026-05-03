@@ -1,0 +1,50 @@
+{
+  "title": "A Year, Briefly",
+  "subtitle": "Your Name \u00b7 2026",
+  "stats": [
+    {
+      "value": "2,418",
+      "label": "photos taken"
+    },
+    {
+      "value": "9",
+      "label": "cities"
+    },
+    {
+      "value": "47",
+      "label": "sunsets watched"
+    },
+    {
+      "value": "6",
+      "label": "books finished"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "scene_00",
+      "image": "sample_assets/02_mountain.jpg",
+      "kicker": "March \u00b7 Hakone",
+      "headline": "Above the Clouds",
+      "caption": "The fog broke at 1,400 metres. Below it: nothing. Above it: everything.",
+      "tone": "reverent"
+    },
+    {
+      "id": "scene_01",
+      "image": "sample_assets/03_coffee.jpg",
+      "kicker": "April \u00b7 Home",
+      "headline": "Third Cup",
+      "caption": "The pour-over ritual that outlasted every other morning habit.",
+      "tone": "warm"
+    },
+    {
+      "id": "scene_02",
+      "image": "sample_assets/09_concert.jpg",
+      "kicker": "September \u00b7 Downtown",
+      "headline": "Opening Act",
+      "caption": "The venue was half-empty for the opener. By the third song it didn't matter.",
+      "tone": "loud"
+    }
+  ],
+  "closing_line": "You did more than you remember.\nThis is the proof.",
+  "signature": "Made by Hermes \u00b7 darkroom"
+}

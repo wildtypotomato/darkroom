@@ -1,0 +1,7 @@
+node_modules/
+__pycache__/
+*.pyc
+.DS_Store
+templates/wrapped/video/out/
+templates/wrapped/video/public/*.png
+templates/wrapped/video/public/*.jpg
