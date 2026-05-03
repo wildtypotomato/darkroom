@@ -2,25 +2,27 @@
 
 A [Hermes Agent](https://github.com/NousResearch/hermes-agent) skill that turns your phone photos into something worth keeping -- a 9:16 recap video and a printed-feel A3 poster, delivered to Telegram.
 
-Built for the **Hermes Creative Hackathon**.
-
 Most "year in review" tools produce the same purple-gradient card layout. Darkroom goes the other way: the references directory contains 10 design rules, 34 named anti-patterns, and five locked style presets sourced from Vignelli, Lupton, and actual editorial design textbooks. The CRITIQUE stage evaluates every render against that rubric before anything gets delivered. The goal is output that looks like it came from a design studio, not a template.
 
 You drop photos into chat over days or weeks. When you want a wrap, `/darkroom wrap` clusters them by time and visual similarity, writes captions, picks a music bed, renders both formats, critiques the result, and sends it back.
 
+On Hermes, Darkroom gets:
+
+- **Parallel captioning and scoring** via `delegate_task` -- roughly halves render time
+- **Cross-session memory** -- `/darkroom wrap --since 30d` pulls photos from weeks-old conversations
+- **17-channel ingestion** -- photos arrive pre-indexed from Telegram and other platforms, no file paths needed
+- **NL cron** -- `/darkroom schedule "every Sunday evening"` and it just shows up
+- **Self-evolving skills** -- after repeated use, the agent writes new sub-skills to disk for patterns it detects
+
+| Skill | What it does |
+|-------|-------------|
+| `/darkroom wrap` | Main pipeline -- cluster, caption, score, render, critique, deliver |
+| `/darkroom teach` | One-time taste interview -- saves aesthetic preferences for future wraps |
+| `/darkroom critique` | Standalone anti-slop evaluation of a rendered artifact |
+| `/darkroom schedule` | Register a Hermes cron -- pick your rhythm |
+| `/darkroom reset` | Clear saved preferences |
+
 > Individual wraps accumulate over time -- a future update will compile them into a single book.
-
-## Why Hermes
-
-Darkroom works without Hermes (sequential mode, local SQLite, manual file paths), but Hermes is where the architecture actually makes sense.
-
-The main bottleneck in the pipeline is captioning and music generation -- they're independent and both involve API calls. On Hermes, `delegate_task` fans these out as parallel sub-agents, which roughly halves the wall time. Without that, the pipeline runs them one after the other and you're just waiting.
-
-The bigger thing is ingestion. On Hermes, photos arrive through Telegram (or any of the 17 supported channels) and land in cross-session FTS5 memory automatically. That means `/darkroom wrap --since 30d` can pull photos you sent three weeks ago in a completely different conversation. Off Hermes, you're passing file paths manually and there's no memory between runs.
-
-And then there's scheduling. `/darkroom schedule "every Sunday evening"` registers a Hermes NL cron that auto-runs the pipeline and delivers to the same chat thread. It turns Darkroom from a tool you have to remember to use into something that just shows up with your week's photos, formatted and ready.
-
-The last piece is the one I'm most interested in: after a few wraps, if the agent notices you keep shooting the same kind of subject (food, architecture, pets), it writes a new sub-skill to disk that handles that pattern directly on future runs. Skills that write skills. That only works on Hermes because it needs the skill filesystem and the agent runtime to load new skills at execution time.
 
 ## Install
 
@@ -80,16 +82,6 @@ HERMES_MODEL=your-model-id
 - Playwright + Chromium (`playwright install chromium`)
 
 > **Note:** First video render installs ~500 MB of Node dependencies automatically. Subsequent runs are instant.
-
-## Commands
-
-| Command | What it does |
-|---------|-------------|
-| `/darkroom teach` | One-time taste interview -- saves your aesthetic preferences |
-| `/darkroom wrap` | Main pipeline -- clusters, captions, scores, renders, delivers |
-| `/darkroom critique` | Standalone anti-slop evaluation of a rendered artifact |
-| `/darkroom reset` | Clear saved preferences |
-| `/darkroom schedule` | Register a Hermes cron -- you pick the rhythm |
 
 ### Flags
 
