@@ -151,7 +151,7 @@ darkroom/
     store.py                # SQLite asset DB
   tests/                    # 35 tests
   templates/wrapped/        # Poster HTML + Remotion video project
-  assets/ambient/           # Bundled fallback audio
+  assets/ambient/           # Bundled music tracks (warm, melancholy, upbeat)
 ```
 
 ## Testing
