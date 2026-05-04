@@ -15,7 +15,7 @@ NOT spin up its own threads — the constraint is "use Hermes' delegation,
 don't roll our own". The log lines are emitted regardless so the demo
 narrative is identical between modes.
 
-Set ``MEMORY_BOOK_RENDER_STUB=1`` in tests to swap the heavy renderers
+Set ``DARKROOM_RENDER_STUB=1`` in tests to swap the heavy renderers
 for placeholder file writers.
 """
 
@@ -264,7 +264,7 @@ def _run_with_delegate(
             {
                 "goal": (
                     "Cluster the asset_ids into scenes and caption each via "
-                    "memory_book.src.{cluster,caption}. Return JSON: "
+                    "darkroom.src.{cluster,caption}. Return JSON: "
                     '{"scenes": [...Scene]}.'
                 ),
                 "context": ctx,
@@ -275,7 +275,7 @@ def _run_with_delegate(
                 "goal": (
                     "Generate a 30-second instrumental score matching the "
                     "dominant scene mood; write to score_path. Use "
-                    "memory_book.src.music.generate_score."
+                    "darkroom.src.music.generate_score."
                 ),
                 "context": ctx,
                 "toolsets": ["terminal", "file"],
@@ -296,8 +296,8 @@ def _run_with_delegate(
     delegate_task(
         goal=(
             "Render the wrapped poster (PDF) and recap (1080x1920 MP4) using "
-            "memory_book.src.render_pdf.render_pdf and "
-            "memory_book.src.render_video.render_video."
+            "darkroom.src.render_pdf.render_pdf and "
+            "darkroom.src.render_video.render_video."
         ),
         context=json.dumps(
             {
@@ -392,7 +392,7 @@ def _run_sequential(
     stats_payload = _stats_payload(assets, scenes, taste)
     closing = narrative_mod.build_closing(scenes)
 
-    if os.environ.get("MEMORY_BOOK_RENDER_STUB") == "1":
+    if os.environ.get("DARKROOM_RENDER_STUB") == "1":
         _stub_render(pdf_path, mp4_path, render_scenes)
     else:
         render_pdf_mod.render_pdf(render_scenes, stats_payload, closing, pdf_path)
@@ -529,7 +529,7 @@ def _ambient_mood_from_scenes(scenes: list[Scene]) -> str:
 
 
 def _run_critique(pdf_path: str, mp4_path: str) -> dict:
-    if os.environ.get("MEMORY_BOOK_RENDER_STUB") == "1":
+    if os.environ.get("DARKROOM_RENDER_STUB") == "1":
         return {"verdict": "PASS", "issues": [], "summary": "stub mode"}
     try:
         from . import critique as critique_mod
@@ -546,7 +546,7 @@ def _run_critique(pdf_path: str, mp4_path: str) -> dict:
 
 
 def _stub_render(pdf_path: str, mp4_path: str, render_scenes: list[dict]) -> None:
-    Path(pdf_path).write_bytes(b"%PDF-1.4\n% memory_book stub\n%%EOF\n")
+    Path(pdf_path).write_bytes(b"%PDF-1.4\n% darkroom stub\n%%EOF\n")
     Path(mp4_path).write_bytes(
         b"\x00\x00\x00\x20ftypisom"
         + b"\x00" * 16

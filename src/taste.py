@@ -1,6 +1,6 @@
-"""Read and write MEMORY_BOOK_TASTE.md — persistent user aesthetic preferences.
+"""Read and write DARKROOM_TASTE.md — persistent user aesthetic preferences.
 
-The file lives at ``{MEMORY_BOOK_HOME}/MEMORY_BOOK_TASTE.md``.  Format is YAML
+The file lives at ``{DARKROOM_HOME}/DARKROOM_TASTE.md``.  Format is YAML
 frontmatter (delimited by ``---``) inside a Markdown file.  Parsed without
 PyYAML — the schema is flat enough for hand-rolled key/value + list parsing.
 
@@ -36,7 +36,7 @@ _DEFAULTS: TasteProfile = TasteProfile(
     default_mode="memorial",
 )
 
-_TASTE_FILENAME = "MEMORY_BOOK_TASTE.md"
+_TASTE_FILENAME = "DARKROOM_TASTE.md"
 
 # Keys whose values are lists (YAML ``- item`` lines).
 _LIST_KEYS = {"banned_moves", "mood_vocabulary"}
@@ -47,7 +47,7 @@ _LIST_KEYS = {"banned_moves", "mood_vocabulary"}
 # ---------------------------------------------------------------------------
 
 def load_taste() -> TasteProfile:
-    """Load ``MEMORY_BOOK_TASTE.md`` from the user's config dir.
+    """Load ``DARKROOM_TASTE.md`` from the user's config dir.
 
     Returns sensible defaults when the file is absent or unparseable.
     """
@@ -62,7 +62,7 @@ def load_taste() -> TasteProfile:
 
 
 def save_taste(profile: TasteProfile) -> Path:
-    """Write ``MEMORY_BOOK_TASTE.md`` to the user's config dir.
+    """Write ``DARKROOM_TASTE.md`` to the user's config dir.
 
     Returns the path written to.
     """
@@ -73,7 +73,7 @@ def save_taste(profile: TasteProfile) -> Path:
 
 
 def clear_taste() -> None:
-    """Delete ``MEMORY_BOOK_TASTE.md`` (for ``/darkroom reset`` command)."""
+    """Delete ``DARKROOM_TASTE.md`` (for ``/darkroom reset`` command)."""
     path = _taste_path()
     if path.exists():
         path.unlink()

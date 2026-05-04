@@ -9,9 +9,9 @@ import pytest
 
 @pytest.fixture()
 def taste_env(monkeypatch, tmp_path):
-    """Point MEMORY_BOOK_HOME at a temp directory and reload the taste module."""
-    monkeypatch.setenv("MEMORY_BOOK_HOME", str(tmp_path))
-    import memory_book.src.taste as taste
+    """Point DARKROOM_HOME at a temp directory and reload the taste module."""
+    monkeypatch.setenv("DARKROOM_HOME", str(tmp_path))
+    import darkroom.src.taste as taste
     importlib.reload(taste)
     return taste, tmp_path
 
@@ -53,10 +53,10 @@ def test_clear_taste(taste_env):
         default_mode="memorial",
     )
     taste.save_taste(custom)
-    assert (home / "MEMORY_BOOK_TASTE.md").exists()
+    assert (home / "DARKROOM_TASTE.md").exists()
 
     taste.clear_taste()
-    assert not (home / "MEMORY_BOOK_TASTE.md").exists()
+    assert not (home / "DARKROOM_TASTE.md").exists()
 
     defaults = taste.load_taste()
     assert defaults["preferred_style"] == "dark-editorial"
@@ -78,7 +78,7 @@ def test_parse_frontmatter_with_lists(taste_env):
         "default_mode: memorial\n"
         "---\n"
     )
-    path = home / "MEMORY_BOOK_TASTE.md"
+    path = home / "DARKROOM_TASTE.md"
     path.write_text(md, encoding="utf-8")
 
     profile = taste.load_taste()
@@ -99,7 +99,7 @@ def test_parse_frontmatter_quoted_values(taste_env):
         'default_mode: memorial\n'
         '---\n'
     )
-    path = home / "MEMORY_BOOK_TASTE.md"
+    path = home / "DARKROOM_TASTE.md"
     path.write_text(md, encoding="utf-8")
 
     profile = taste.load_taste()
@@ -113,7 +113,7 @@ def test_missing_keys_filled_with_defaults(taste_env):
         "preferred_style: minimal\n"
         "---\n"
     )
-    path = home / "MEMORY_BOOK_TASTE.md"
+    path = home / "DARKROOM_TASTE.md"
     path.write_text(md, encoding="utf-8")
 
     profile = taste.load_taste()

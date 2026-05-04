@@ -1,6 +1,6 @@
 # Design Philosophy — Universal Rules
 
-The floor under every Memory Book artefact. A rule earns its place only if it surfaces in three or more of our four sources, or sits beneath all of them as bedrock. Each rule lands on **both** the PDF poster and the 9:16 video — if it does not, it does not belong here.
+The floor under every Darkroom artefact. A rule earns its place only if it surfaces in three or more of our four sources, or sits beneath all of them as bedrock. Each rule lands on **both** the PDF poster and the 9:16 video — if it does not, it does not belong here.
 
 Voice: Vignelli's absolutism, Lupton's precision, Refactoring UI's pragmatism, Caldwell/Zappaterra's pacing. Read it as a checklist, not an essay.
 
@@ -148,4 +148,4 @@ Voice: Vignelli's absolutism, Lupton's precision, Refactoring UI's pragmatism, C
 
 ## The floor
 
-If a Memory Book artefact violates any of these ten rules, it is not finished. The CRITIQUE stage tests against this list before delivery. The anti-slop gallery (`anti_slop.md`) names the specific failure modes; this file holds the principles those failures contradict.
+If a Darkroom artefact violates any of these ten rules, it is not finished. The CRITIQUE stage tests against this list before delivery. The anti-slop gallery (`anti_slop.md`) names the specific failure modes; this file holds the principles those failures contradict.

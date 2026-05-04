@@ -8,7 +8,7 @@ from unittest import mock
 
 import pytest
 
-from memory_book.src import music
+from darkroom.src import music
 
 
 def _duration(path: str) -> float:

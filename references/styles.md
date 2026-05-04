@@ -101,7 +101,7 @@ Voice carries through. `dark-editorial` is warm cinematic restraint. Vignelli's 
 - Frame rhythm: hero (3 s) → cut to white (0.5 s) → caption (3 s) → cut.
 
 ### When to use
-- Institutional retrospectives. Annual reports as wraps. A wrap for someone whose taste is "Knoll catalogue, not Spotify Wrapped." Default for `--mode=archival` when the user's `MEMORY_BOOK_TASTE.md` reads "modernist", "rigorous", "Swiss".
+- Institutional retrospectives. Annual reports as wraps. A wrap for someone whose taste is "Knoll catalogue, not Spotify Wrapped." Default for `--mode=archival` when the user's `DARKROOM_TASTE.md` reads "modernist", "rigorous", "Swiss".
 
 ### When NOT to use
 - Anything emotional, warm, intimate, or playful. Children's milestones. Personal grief. A wedding. Anything that benefits from narrative pacing — Vignelli's preset has no pacing, only presence.
@@ -227,7 +227,7 @@ Voice carries through. `dark-editorial` is warm cinematic restraint. Vignelli's 
 - No floating type. Every text element appears at a fixed grid coordinate.
 
 ### When to use
-- Photo essays with written captions. Archival wraps that want gravitas. A wrap for a reader who notices italics. Default for `--mode=archival` when `MEMORY_BOOK_TASTE.md` reads "editorial", "literary", "magazine".
+- Photo essays with written captions. Archival wraps that want gravitas. A wrap for a reader who notices italics. Default for `--mode=archival` when `DARKROOM_TASTE.md` reads "editorial", "literary", "magazine".
 
 ### When NOT to use
 - Wraps where the user wants warmth and emotion to dominate over typographic precision. Animation-heavy outputs. Social-feed wraps where compressed type and small frames make optical-size distinctions invisible.

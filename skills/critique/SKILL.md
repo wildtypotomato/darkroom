@@ -37,8 +37,8 @@ The evaluation runs three passes against each screenshot or frame:
 
 Call the appropriate critique function:
 
-- **PDF:** `memory_book.src.critique.critique_pdf(artifact_path)` — screenshots the full page, runs vision analysis, returns `CritiqueResult`.
-- **MP4:** `memory_book.src.critique.critique_video(artifact_path)` — extracts 5 frames, runs vision analysis on each, aggregates into `CritiqueResult`.
+- **PDF:** `darkroom.src.critique.critique_pdf(artifact_path)` — screenshots the full page, runs vision analysis, returns `CritiqueResult`.
+- **MP4:** `darkroom.src.critique.critique_video(artifact_path)` — extracts 5 frames, runs vision analysis on each, aggregates into `CritiqueResult`.
 
 The `CritiqueResult` contains:
 - `verdict`: PASS | WARN | FAIL

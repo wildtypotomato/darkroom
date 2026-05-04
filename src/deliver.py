@@ -4,7 +4,7 @@ Outbound files use Hermes' ``MEDIA:`` tag protocol — the gateway extracts
 the tags from the agent's final reply string and sends the referenced
 files as native attachments. See docs/RESEARCH_NOTES.md §2.6.
 
-Cron registration writes a small descriptor under ``$MEMORY_BOOK_HOME/
+Cron registration writes a small descriptor under ``$DARKROOM_HOME/
 schedules/<id>.json``. If Hermes' ``schedule`` tool is importable at
 runtime the descriptor is also registered with it; otherwise the file
 alone is enough for the demo (the gateway picks descriptors up on start

@@ -46,33 +46,14 @@ playwright install chromium
 
 | Variable | Purpose | Required |
 |----------|---------|----------|
-| `MEMORY_BOOK_API_KEY` | Vision captioning and critique (any OpenAI-compatible provider) | Yes (see below) |
-| `MEMORY_BOOK_API_URL` | API endpoint URL | No (defaults to OpenRouter) |
-| `HERMES_MODEL` | Model ID for vision calls | No (defaults to `nousresearch/hermes-4-405b`) |
 | `SUNO_API_KEY` | Music generation | No (falls back to bundled ambient audio) |
-| `MEMORY_BOOK_HOME` | Data directory | No (defaults to `~/.memory_book`) |
+| `DARKROOM_HOME` | Data directory | No (defaults to `~/.darkroom`) |
 
-**API key resolution:** checks `MEMORY_BOOK_API_KEY` then `OPENROUTER_API_KEY` then `HERMES_API_KEY` in order. Set whichever matches your provider. On Hermes, the `delegate_task` path uses the agent's own configured model for orchestration -- the API key is only needed for the vision captioning fallback.
-
-**Provider examples:**
-```bash
-# OpenRouter (default)
-MEMORY_BOOK_API_KEY=sk-or-...
-
-# Together AI
-MEMORY_BOOK_API_URL=https://api.together.xyz/v1/chat/completions
-MEMORY_BOOK_API_KEY=...
-HERMES_MODEL=meta-llama/Llama-4-Scout-17B-16E-Instruct
-
-# Any OpenAI-compatible endpoint
-MEMORY_BOOK_API_URL=https://your-provider/v1/chat/completions
-MEMORY_BOOK_API_KEY=...
-HERMES_MODEL=your-model-id
-```
+Vision captioning and critique run through Hermes `delegate_task` -- no separate API key needed.
 
 **Stub modes** for testing without API calls:
-- `MEMORY_BOOK_VISION_STUB=1` -- returns placeholder captions
-- `MEMORY_BOOK_RENDER_STUB=1` -- skips Playwright/Remotion rendering
+- `DARKROOM_VISION_STUB=1` -- returns placeholder captions
+- `DARKROOM_RENDER_STUB=1` -- skips Playwright/Remotion rendering
 
 ## Runtime Dependencies
 
@@ -175,10 +156,10 @@ darkroom/
 pip install -e ".[test]"
 
 # Run tests (stub mode, no API calls needed)
-MEMORY_BOOK_VISION_STUB=1 MEMORY_BOOK_RENDER_STUB=1 pytest
+DARKROOM_VISION_STUB=1 DARKROOM_RENDER_STUB=1 pytest
 
 # Run with rendering (requires Playwright + Node.js)
-MEMORY_BOOK_VISION_STUB=1 pytest
+DARKROOM_VISION_STUB=1 pytest
 ```
 
 ## License

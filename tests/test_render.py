@@ -12,8 +12,8 @@ from pathlib import Path
 
 import pytest
 
-from memory_book.src.render_pdf import render_pdf
-from memory_book.src.render_video import render_video
+from darkroom.src.render_pdf import render_pdf
+from darkroom.src.render_video import render_video
 
 TEMPLATES = Path(__file__).resolve().parent.parent / "templates" / "wrapped"
 SAMPLE = TEMPLATES / "sample.json"

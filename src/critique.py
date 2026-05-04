@@ -1,16 +1,15 @@
 """Evaluate rendered artifacts against the anti-slop rubric.
 
 Screenshots the PDF and samples video frames, then sends them to Hermes 4
-vision to check for named anti-patterns from ``references/anti_slop.md``.
+vision via delegate_task to check for named anti-patterns from
+``references/anti_slop.md``.
 
-Test mode: set ``MEMORY_BOOK_VISION_STUB=1`` to short-circuit the API call
+Test mode: set ``DARKROOM_VISION_STUB=1`` to short-circuit the API call
 and return PASS with no issues. Same env var as ``caption.py``.
 """
 from __future__ import annotations
 
-import base64
 import json
-import mimetypes
 import os
 import re
 import shutil
@@ -18,8 +17,6 @@ import subprocess
 import tempfile
 from pathlib import Path
 from typing import TypedDict
-
-import requests
 
 # ---------------------------------------------------------------------------
 # Types
@@ -41,23 +38,17 @@ class CritiqueResult(TypedDict):
 # Config
 # ---------------------------------------------------------------------------
 
-API_URL = os.environ.get(
-    "MEMORY_BOOK_API_URL",
-    os.environ.get("OPENROUTER_URL", "https://openrouter.ai/api/v1/chat/completions"),
-)
-HERMES_MODEL = os.environ.get("HERMES_MODEL", "nousresearch/hermes-4-405b")
-
 _RUBRIC_PATH = Path(__file__).resolve().parent.parent / "references" / "anti_slop.md"
 
 VIDEO_SAMPLE_FRAMES = 5
 
 
-def _resolve_api_key() -> str:
-    for var in ("MEMORY_BOOK_API_KEY", "OPENROUTER_API_KEY", "HERMES_API_KEY"):
-        val = os.environ.get(var, "").strip()
-        if val:
-            return val
-    return ""
+def _resolve_delegate_task():
+    try:
+        from hermes.tools import delegate_task  # type: ignore[import-not-found]
+        return delegate_task
+    except Exception:
+        return None
 
 
 # ---------------------------------------------------------------------------
@@ -140,7 +131,7 @@ def critique_artifact(pdf_path: str, mp4_path: str) -> CritiqueResult:
 # ---------------------------------------------------------------------------
 
 def _is_stub() -> bool:
-    return os.environ.get("MEMORY_BOOK_VISION_STUB") == "1"
+    return os.environ.get("DARKROOM_VISION_STUB") == "1"
 
 
 def _stub_result() -> CritiqueResult:
@@ -296,10 +287,10 @@ def _vision_critique(
     rubric: str,
     artifact_type: str,
 ) -> CritiqueResult:
-    """Send images to a vision model with the anti-slop rubric."""
-    api_key = _resolve_api_key()
-    if not api_key:
-        return _pass_with_warning("no API key; skipping critique")
+    """Send images to Hermes vision via delegate_task with the anti-slop rubric."""
+    delegate = _resolve_delegate_task()
+    if delegate is None:
+        return _pass_with_warning("no delegate_task available; skipping critique")
 
     system_prompt = (
         "You are a design quality reviewer. You evaluate rendered artifacts "
@@ -322,45 +313,17 @@ def _vision_critique(
         "Return ONLY the JSON, no prose."
     )
 
-    content: list[dict] = [
-        {
-            "type": "text",
-            "text": f"Evaluate this {artifact_type} against the anti-slop rubric.",
-        }
-    ]
-    for img_path in images:
-        data_url = _to_data_url(img_path)
-        content.append({"type": "image_url", "image_url": {"url": data_url}})
-
-    payload = {
-        "model": HERMES_MODEL,
-        "messages": [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": content},
-        ],
-        "temperature": 0.3,
-        "max_tokens": 1000,
-    }
-
     try:
-        r = requests.post(
-            API_URL,
-            headers={
-                "Authorization": f"Bearer {api_key}",
-                "Content-Type": "application/json",
-                "HTTP-Referer": "https://github.com/NousResearch/hermes-agent",
-                "X-Title": "Memory Book Critique",
-            },
-            json=payload,
-            timeout=90,
+        result = delegate(
+            goal=system_prompt,
+            context=json.dumps({"image_paths": images, "artifact_type": artifact_type}),
+            toolsets=["terminal", "file"],
+            max_iterations=15,
         )
-        r.raise_for_status()
-        body = r.json()
-        text = body["choices"][0]["message"]["content"]
+        text = result.get("summary") if isinstance(result, dict) else str(result)
         return _parse_critique_response(text)
     except Exception as e:
-        status = getattr(getattr(e, "response", None), "status_code", None)
-        msg = f"vision API error: HTTP {status}" if status else f"vision API error: {type(e).__name__}"
+        msg = f"delegate_task critique failed: {type(e).__name__}"
         return _pass_with_warning(msg)
 
 
@@ -443,13 +406,3 @@ def _compute_verdict(issues: list[CritiqueIssue]) -> str:
     return "WARN"
 
 
-# ---------------------------------------------------------------------------
-# Image encoding
-# ---------------------------------------------------------------------------
-
-def _to_data_url(path: str) -> str:
-    mime, _ = mimetypes.guess_type(path)
-    mime = mime or "image/png"
-    data = Path(path).read_bytes()
-    b64 = base64.b64encode(data).decode("ascii")
-    return f"data:{mime};base64,{b64}"

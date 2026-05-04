@@ -1,6 +1,6 @@
 # Motion Design Reference — 9:16 MP4
 
-Unified motion specification for Memory Book video output. Consolidates and deepens the per-preset motion specs in `styles.md` and the five motion anti-patterns (#25–29) in `anti_slop.md`. This is the single source of truth for how things move.
+Unified motion specification for Darkroom video output. Consolidates and deepens the per-preset motion specs in `styles.md` and the five motion anti-patterns (#25–29) in `anti_slop.md`. This is the single source of truth for how things move.
 
 Cross-references:
 - `design-philosophy.md` — universal design rules (DP Rule N)
@@ -11,7 +11,7 @@ Cross-references:
 
 ## 1. Timing Vocabulary
 
-Every duration in Memory Book is expressed in seconds at 30 fps. One second = 30 frames. These are the constants.
+Every duration in Darkroom is expressed in seconds at 30 fps. One second = 30 frames. These are the constants.
 
 ### Scene Duration
 
@@ -156,7 +156,7 @@ Horizontal or vertical movement across the image. No zoom.
 
 ### Forbidden Movements
 
-These never appear in a Memory Book video:
+These never appear in a Darkroom video:
 
 | Movement | Why forbidden |
 |---|---|
@@ -435,7 +435,7 @@ Meditative, almost still. Motion is the exception, not the rule.
 
 ## 6. Text Animation Rules
 
-Text in Memory Book videos appears and disappears. It does not perform.
+Text in Darkroom videos appears and disappears. It does not perform.
 
 ### Title Card
 

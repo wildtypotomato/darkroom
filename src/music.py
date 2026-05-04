@@ -7,7 +7,7 @@ looped/trimmed to the requested duration with ffmpeg.
 Any error in the Suno path -> automatic fallback with a [music] log line.
 Empty SUNO_API_KEY -> straight to fallback, no error.
 
-Set MEMORY_BOOK_SUNO_BASE_URL to override the default Suno API endpoint.
+Set DARKROOM_SUNO_BASE_URL to override the default Suno API endpoint.
 """
 
 from __future__ import annotations
@@ -20,7 +20,7 @@ from pathlib import Path
 import requests
 
 SUNO_BASE = os.environ.get(
-    "MEMORY_BOOK_SUNO_BASE_URL",
+    "DARKROOM_SUNO_BASE_URL",
     "https://api.sunoapi.org/api/v1",
 )
 AMBIENT = Path(__file__).resolve().parent.parent / "assets" / "ambient"

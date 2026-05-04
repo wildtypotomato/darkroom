@@ -19,12 +19,12 @@ TEST_HOME = None  # populated in fixture
 
 @pytest.fixture()
 def isolated_store(monkeypatch, tmp_path):
-    """Point store + ingest at a tempdir so we don't touch ~/.memory_book."""
-    monkeypatch.setenv("MEMORY_BOOK_HOME", str(tmp_path))
+    """Point store + ingest at a tempdir so we don't touch ~/.darkroom."""
+    monkeypatch.setenv("DARKROOM_HOME", str(tmp_path))
     # Force re-import so module-level constants pick up the env var.
     import importlib
-    import memory_book.src.store as store
-    import memory_book.src.ingest as ingest
+    import darkroom.src.store as store
+    import darkroom.src.ingest as ingest
     importlib.reload(store)
     importlib.reload(ingest)
     store.init_db()

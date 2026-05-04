@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Renders the sample Wrapped poster (PDF) and recap (MP4) from sample.json.
-# Pure preview pipeline — does not touch memory_book/src/.
+# Pure preview pipeline — does not touch darkroom/src/.
 #
 # Outputs:
 #   /tmp/wrapped_sample/poster.pdf

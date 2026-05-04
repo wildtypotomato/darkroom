@@ -46,7 +46,7 @@ def compute_embedding(path: str) -> bytes:
     The fallback is deterministic and good enough for time-aware clustering
     on small (≤50) photo sets — which is the demo's scale.
     """
-    if os.environ.get("MEMORY_BOOK_EMBED_FALLBACK") == "1":
+    if os.environ.get("DARKROOM_EMBED_FALLBACK") == "1":
         vec = _hist_embedding(path)
     else:
         try:

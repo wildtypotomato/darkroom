@@ -2,7 +2,7 @@
 
 8 fixture photos → ``compose("wrapped", {"since": "7d"})`` → manifest
 references existing PDF + MP4 files. Renderers are heavy (Chromium /
-Remotion / ffmpeg); we set ``MEMORY_BOOK_RENDER_STUB=1`` so the renderer
+Remotion / ffmpeg); we set ``DARKROOM_RENDER_STUB=1`` so the renderer
 step writes lightweight placeholder files instead of invoking the real
 toolchain. The wiring under test is the orchestration, not the renderers
 (those are covered in test_render.py).
@@ -48,19 +48,19 @@ def _make_jpeg(path: Path, taken: dt.datetime, color: tuple[int, int, int]) -> N
 
 @pytest.fixture()
 def env(monkeypatch, tmp_path):
-    monkeypatch.setenv("MEMORY_BOOK_HOME", str(tmp_path))
-    monkeypatch.setenv("MEMORY_BOOK_VISION_STUB", "1")
-    monkeypatch.setenv("MEMORY_BOOK_EMBED_FALLBACK", "1")
-    monkeypatch.setenv("MEMORY_BOOK_RENDER_STUB", "1")
+    monkeypatch.setenv("DARKROOM_HOME", str(tmp_path))
+    monkeypatch.setenv("DARKROOM_VISION_STUB", "1")
+    monkeypatch.setenv("DARKROOM_EMBED_FALLBACK", "1")
+    monkeypatch.setenv("DARKROOM_RENDER_STUB", "1")
     monkeypatch.setenv("SUNO_API_KEY", "")  # force ambient fallback
 
     # Reload modules so module-level paths re-evaluate against the tempdir.
-    import memory_book.src.store as store
-    import memory_book.src.ingest as ingest
-    import memory_book.src.cluster as cluster
-    import memory_book.src.caption as caption
-    import memory_book.src.narrative as narrative
-    import memory_book.src.compose as compose
+    import darkroom.src.store as store
+    import darkroom.src.ingest as ingest
+    import darkroom.src.cluster as cluster
+    import darkroom.src.caption as caption
+    import darkroom.src.narrative as narrative
+    import darkroom.src.compose as compose
     for m in (store, ingest, cluster, caption, narrative, compose):
         importlib.reload(m)
     store.init_db()
@@ -96,7 +96,7 @@ def test_compose_wrapped_writes_manifest_with_pdf_and_mp4(env):
     assert mp4.exists() and mp4.stat().st_size > 0, f"missing MP4: {mp4}"
     assert score.exists() and score.stat().st_size > 0, f"missing score: {score}"
 
-    # Manifest persisted under ~/.memory_book/artifacts/<id>/manifest.json.
+    # Manifest persisted under ~/.darkroom/artifacts/<id>/manifest.json.
     manifest_file = env["home"] / "artifacts" / manifest["id"] / "manifest.json"
     assert manifest_file.exists(), f"manifest not written to {manifest_file}"
     payload = json.loads(manifest_file.read_text())
@@ -104,7 +104,7 @@ def test_compose_wrapped_writes_manifest_with_pdf_and_mp4(env):
 
 
 def test_deliver_emits_media_tags(env, tmp_path):
-    import memory_book.src.deliver as deliver
+    import darkroom.src.deliver as deliver
     importlib.reload(deliver)
 
     pdf = tmp_path / "p.pdf"; pdf.write_bytes(b"%PDF-1.4\n")
@@ -125,7 +125,7 @@ def test_deliver_emits_media_tags(env, tmp_path):
 
 
 def test_register_recap_cron_writes_schedule(env, tmp_path):
-    import memory_book.src.deliver as deliver
+    import darkroom.src.deliver as deliver
     importlib.reload(deliver)
 
     sid = deliver.register_recap_cron(

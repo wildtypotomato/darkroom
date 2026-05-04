@@ -1,25 +1,20 @@
 """Caption a scene with Hermes 4 vision.
 
-Sends up to 4 hero photos to Hermes 4 (via OpenRouter) and parses a JSON
+Sends up to 4 hero photos to Hermes 4 via delegate_task and parses a JSON
 response into a Scene dict. Disk-cached by SHA256(file bytes + prompt
 version) so reruns during dev are free.
 
-Test mode: set `MEMORY_BOOK_VISION_STUB=1` to short-circuit the API call
+Test mode: set `DARKROOM_VISION_STUB=1` to short-circuit the API call
 and return a deterministic stub. Don't ship that env var to production.
 """
 
 from __future__ import annotations
 
-import base64
 import hashlib
 import json
-import mimetypes
 import os
 import re
-import time
 from pathlib import Path
-
-import requests
 
 from .store import Asset, Scene, home
 
@@ -29,11 +24,6 @@ MOOD_VOCAB = ("warm", "melancholy", "upbeat", "golden", "quiet")
 DEFAULT_MOOD = "quiet"
 MAX_CAPTION_WORDS = 50
 
-API_URL = os.environ.get(
-    "MEMORY_BOOK_API_URL",
-    os.environ.get("OPENROUTER_URL", "https://openrouter.ai/api/v1/chat/completions"),
-)
-HERMES_MODEL = os.environ.get("HERMES_MODEL", "nousresearch/hermes-4-405b")
 
 SYSTEM_PROMPT = (
     "You write photo-album captions for a friend, not museum labels. "
@@ -108,14 +98,6 @@ def caption_scene(
 # ---------------------------------------------------------------------------
 
 
-def _resolve_api_key() -> str:
-    """Check multiple env vars for an API key. Supports OpenRouter, any
-    OpenAI-compatible provider, or the Hermes-internal key."""
-    for var in ("MEMORY_BOOK_API_KEY", "OPENROUTER_API_KEY", "HERMES_API_KEY"):
-        val = os.environ.get(var, "").strip()
-        if val:
-            return val
-    return ""
 
 
 def _build_system_prompt(
@@ -167,65 +149,42 @@ def _call_vision(
     taste: dict | None = None,
     user_context: str | None = None,
 ) -> dict:
-    if os.environ.get("MEMORY_BOOK_VISION_STUB") == "1":
+    if os.environ.get("DARKROOM_VISION_STUB") == "1":
         return _stub_response(heroes)
 
-    api_key = _resolve_api_key()
-    if not api_key:
-        print("[caption] no API key configured, using stub response")
+    delegate = _resolve_delegate_task()
+    if delegate is None:
+        print("[caption] no delegate_task available, using stub response")
         return _stub_response(heroes)
 
     system_prompt = _build_system_prompt(taste, user_context)
 
-    content: list[dict] = [
-        {
-            "type": "text",
-            "text": "Caption this scene in JSON as instructed.",
-        }
-    ]
-    for hero in heroes:
-        data_url = _to_data_url(hero["path"])
-        content.append({"type": "image_url", "image_url": {"url": data_url}})
+    content_parts = ["Caption this scene in JSON as instructed."]
+    image_paths = [hero["path"] for hero in heroes]
 
-    payload = {
-        "model": HERMES_MODEL,
-        "messages": [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": content},
-        ],
-        "temperature": 0.6,
-        "max_tokens": 200,
-    }
+    try:
+        result = delegate(
+            goal=(
+                f"You are a photo caption writer. {system_prompt}\n\n"
+                f"Look at these images and return the JSON as instructed."
+            ),
+            context=json.dumps({"image_paths": image_paths}),
+            toolsets=["terminal", "file"],
+            max_iterations=10,
+        )
+        text = result.get("summary") if isinstance(result, dict) else str(result)
+        return _parse_json(text)
+    except Exception as e:
+        print(f"[caption] delegate_task failed ({e}), using stub response")
+        return _stub_response(heroes)
 
-    last_err: Exception | None = None
-    for attempt in range(3):
-        try:
-            r = requests.post(
-                API_URL,
-                headers={
-                    "Authorization": f"Bearer {api_key}",
-                    "Content-Type": "application/json",
-                    "HTTP-Referer": "https://github.com/NousResearch/hermes-agent",
-                    "X-Title": "Memory Book",
-                },
-                json=payload,
-                timeout=60,
-            )
-            r.raise_for_status()
-            body = r.json()
-            text = body["choices"][0]["message"]["content"]
-            return _parse_json(text)
-        except requests.exceptions.RequestException as e:
-            last_err = e
-            status = getattr(getattr(e, "response", None), "status_code", None)
-            retryable = status in (429, 500, 502, 503, 504) or isinstance(
-                e, requests.exceptions.ConnectionError
-            )
-            if retryable and attempt < 2:
-                time.sleep(2**attempt)
-                continue
-            raise
-    raise last_err  # type: ignore[misc]
+
+def _resolve_delegate_task():
+    try:
+        from hermes.tools import delegate_task  # type: ignore[import-not-found]
+        return delegate_task
+    except Exception:
+        return None
 
 
 _STUB_LIBRARY: dict[str, dict[str, str]] = {
@@ -387,14 +346,6 @@ def _parse_json(text: str) -> dict:
         except json.JSONDecodeError:
             return {}
     return {}
-
-
-def _to_data_url(path: str) -> str:
-    mime, _ = mimetypes.guess_type(path)
-    mime = mime or "image/jpeg"
-    data = Path(path).read_bytes()
-    b64 = base64.b64encode(data).decode("ascii")
-    return f"data:{mime};base64,{b64}"
 
 
 def _normalise_mood(value) -> str:

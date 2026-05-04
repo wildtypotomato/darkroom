@@ -1,12 +1,12 @@
 ---
 name: darkroom-teach
-description: One-time taste interview that captures aesthetic preferences into MEMORY_BOOK_TASTE.md
+description: One-time taste interview that captures aesthetic preferences into DARKROOM_TASTE.md
 user-invocable: true
 ---
 
 ## MANDATORY PREPARATION
 
-Check whether `MEMORY_BOOK_TASTE.md` already exists in the user's Hermes config directory.
+Check whether `DARKROOM_TASTE.md` already exists in the user's Hermes config directory.
 
 - **If it exists:** Show the user their current preferences in a compact summary. Ask: "Override these, or keep them?" If keep, exit early.
 - **If absent:** Proceed directly to the interview.
@@ -19,7 +19,7 @@ The interview captures six dimensions that shape every `/darkroom wrap` output �
 
 ## Plan
 
-Ask these questions in order. Each maps to a `MEMORY_BOOK_TASTE.md` field. Adapt phrasing to the conversation, but cover every field.
+Ask these questions in order. Each maps to a `DARKROOM_TASTE.md` field. Adapt phrasing to the conversation, but cover every field.
 
 ### Q1 → `preferred_style`
 "What's the closest magazine or publication to the feel you want? Think about the layouts, not the content. *Monocle*, *Kinfolk*, *Bloomberg Businessweek*, a museum catalogue — anything."
@@ -49,7 +49,7 @@ If the user doesn't read magazines, offer the four presets by description:
 
 After the interview:
 
-1. Map answers to the `MEMORY_BOOK_TASTE.md` schema:
+1. Map answers to the `DARKROOM_TASTE.md` schema:
 
 | Field | Type | Source |
 |-------|------|--------|
@@ -60,8 +60,8 @@ After the interview:
 | `accent_color` | HSL or name | Q5 → resolved to a usable value |
 | `default_mode` | `memorial` or `archival` | Q6 → one of two values |
 
-2. Write the file using `memory_book.src.taste.save_taste()`.
+2. Write the file using `darkroom.src.taste.save_taste()`.
 
 ## Verify
 
-Read back the saved `MEMORY_BOOK_TASTE.md` and print it to the user in a compact block. Ask: "This look right? You can re-run `/darkroom teach` or `/darkroom reset` any time."
+Read back the saved `DARKROOM_TASTE.md` and print it to the user in a compact block. Ask: "This look right? You can re-run `/darkroom teach` or `/darkroom reset` any time."

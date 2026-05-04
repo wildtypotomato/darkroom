@@ -21,16 +21,16 @@ from PIL import Image
 
 @pytest.fixture()
 def env(monkeypatch, tmp_path):
-    monkeypatch.setenv("MEMORY_BOOK_HOME", str(tmp_path))
-    monkeypatch.setenv("MEMORY_BOOK_VISION_STUB", "1")
-    monkeypatch.setenv("MEMORY_BOOK_EMBED_FALLBACK", "1")
+    monkeypatch.setenv("DARKROOM_HOME", str(tmp_path))
+    monkeypatch.setenv("DARKROOM_VISION_STUB", "1")
+    monkeypatch.setenv("DARKROOM_EMBED_FALLBACK", "1")
 
     # Reload so module-level paths re-evaluate against the tempdir.
-    import memory_book.src.store as store
-    import memory_book.src.ingest as ingest
-    import memory_book.src.cluster as cluster
-    import memory_book.src.caption as caption
-    import memory_book.src.narrative as narrative
+    import darkroom.src.store as store
+    import darkroom.src.ingest as ingest
+    import darkroom.src.cluster as cluster
+    import darkroom.src.caption as caption
+    import darkroom.src.narrative as narrative
     for m in (store, ingest, cluster, caption, narrative):
         importlib.reload(m)
     store.init_db()
@@ -93,7 +93,7 @@ def _ingest_fixtures(env_) -> dict[str, str]:
     # JPEGs cleanly via piexif round-trip without extra rigging).
     store = env_["store"]
     import sqlite3
-    with sqlite3.connect(env_["home"] / "memory_book.db") as c:
+    with sqlite3.connect(env_["home"] / "darkroom.db") as c:
         for (name, _t, _c, gps), aid in zip(FIXTURES, asset_ids):
             if gps is not None:
                 c.execute(

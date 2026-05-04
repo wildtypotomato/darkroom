@@ -10,10 +10,10 @@ import pytest
 
 @pytest.fixture()
 def critique_env(monkeypatch, tmp_path):
-    """Set MEMORY_BOOK_HOME and MEMORY_BOOK_VISION_STUB, reload module."""
-    monkeypatch.setenv("MEMORY_BOOK_HOME", str(tmp_path))
-    monkeypatch.setenv("MEMORY_BOOK_VISION_STUB", "1")
-    import memory_book.src.critique as critique
+    """Set DARKROOM_HOME and DARKROOM_VISION_STUB, reload module."""
+    monkeypatch.setenv("DARKROOM_HOME", str(tmp_path))
+    monkeypatch.setenv("DARKROOM_VISION_STUB", "1")
+    import darkroom.src.critique as critique
     importlib.reload(critique)
     return critique, tmp_path
 

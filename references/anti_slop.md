@@ -20,7 +20,7 @@ Sources cited by shorthand:
 
 **Why it's bad.** The single most common AI-generated "year in review" aesthetic — it signals the model defaulted. Violates DP Rule 10 (reject decoration; constraint carries personality), DP Rule 6 (one ink, one accent — no gradients). Impeccable names purple gradients and AI color palettes as top-tier slop. Vignelli pp. 11–14: gradients and shadows are visual pollution.
 
-**What to do instead.** Near-black on off-white. One earned accent color. Typography and white space carry the personality. The Memory Book is an editorial artifact, not a tech product wrap-up.
+**What to do instead.** Near-black on off-white. One earned accent color. Typography and white space carry the personality. The Darkroom is an editorial artifact, not a tech product wrap-up.
 
 ### 2. Gradient Text
 

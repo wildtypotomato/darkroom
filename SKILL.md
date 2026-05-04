@@ -85,13 +85,13 @@ All commands use `/darkroom <subcommand>` syntax with space-separated arguments:
 
 | Command | Description | Skill file |
 |---------|-------------|------------|
-| `/darkroom teach` | One-time taste interview — captures aesthetic preferences to `MEMORY_BOOK_TASTE.md` | [`skills/teach/SKILL.md`](skills/teach/SKILL.md) |
+| `/darkroom teach` | One-time taste interview — captures aesthetic preferences to `DARKROOM_TASTE.md` | [`skills/teach/SKILL.md`](skills/teach/SKILL.md) |
 | `/darkroom wrap` | Main pipeline — RECALL through DELIVER. Accepts `--style`, `--mode`, `--since` flags | [`skills/wrap/SKILL.md`](skills/wrap/SKILL.md) |
 | `/darkroom critique` | Standalone anti-slop evaluation of a rendered PDF or MP4 | [`skills/critique/SKILL.md`](skills/critique/SKILL.md) |
-| `/darkroom reset` | Clear `MEMORY_BOOK_TASTE.md` and revert to defaults | [`skills/reset/SKILL.md`](skills/reset/SKILL.md) |
+| `/darkroom reset` | Clear `DARKROOM_TASTE.md` and revert to defaults | [`skills/reset/SKILL.md`](skills/reset/SKILL.md) |
 | `/darkroom schedule` | Register a Hermes NL cron job for automatic wraps | [`skills/schedule/SKILL.md`](skills/schedule/SKILL.md) |
 
-## Persistent Context: MEMORY_BOOK_TASTE.md
+## Persistent Context: DARKROOM_TASTE.md
 
 Written by `/darkroom teach`, loaded at the start of every `/darkroom wrap`. Schema:
 
@@ -118,7 +118,7 @@ Five locked presets, each derived from a canonical design source. Full specs in 
 | `editorial-grid-authority` | Caldwell & Zappaterra | Dominant image, proportional grid, paced spreads — the magazine feature |
 | `editorial-typographic` | Ellen Lupton | Baseline-aware grid, serif body, one disciplined display partner |
 
-Select via `--style=<slug>` or persist in `MEMORY_BOOK_TASTE.md`. Each preset specifies typography, palette, grid, voice, and motion rules for both PDF and MP4.
+Select via `--style=<slug>` or persist in `DARKROOM_TASTE.md`. Each preset specifies typography, palette, grid, voice, and motion rules for both PDF and MP4.
 
 ## Hermes-Only Beats
 
@@ -144,7 +144,7 @@ Hermes built-in memory stores every ingested asset with full-text search (FTS5).
 
 **Visible in:** RECALL stage. Semantic queries return assets from prior sessions.
 
-**Off Hermes:** SQLite FTS5 on local `~/.memory_book` store. Same query interface, but only assets explicitly ingested in prior runs.
+**Off Hermes:** SQLite FTS5 on local `~/.darkroom` store. Same query interface, but only assets explicitly ingested in prior runs.
 
 ### 4. NL Cron + Multi-Channel Delivery
 
@@ -160,7 +160,7 @@ After the first `/darkroom wrap`, if the agent detects a repeating caption patte
 
 **Visible in:** Post-DELIVER stage. File tree shows a new `.py` skill appearing. This is the centerpiece demo beat — Hermes skills that write Hermes skills.
 
-**Off Hermes:** Sub-skill authoring skipped. Taste preferences still persist in `MEMORY_BOOK_TASTE.md`.
+**Off Hermes:** Sub-skill authoring skipped. Taste preferences still persist in `DARKROOM_TASTE.md`.
 
 ## References
 

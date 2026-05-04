@@ -1,4 +1,4 @@
-# Caption Writing Guide — Memory Book NARRATE Stage
+# Caption Writing Guide — Darkroom NARRATE Stage
 
 Reference for the captioning agent. Loaded as context during NARRATE. Every rule has a concrete example. Cross-references point to `design-philosophy.md` (DP), `anti_slop.md` (AS), and `styles.md` (ST) within this `references/` directory.
 
@@ -121,7 +121,7 @@ See AS #21 (Museum Label), AS #22 (Generic AI Caption).
 
 ### 2.4 No first person
 
-Memory Book captions use second person ("you") or third person. First person ("I went to...") breaks the editorial voice and reads as diary entry, not designed artifact.
+Darkroom captions use second person ("you") or third person. First person ("I went to...") breaks the editorial voice and reads as diary entry, not designed artifact.
 
 **BAD:** "I loved this place so much."
 **BAD:** "We had the best time here."
@@ -424,7 +424,7 @@ Used for the opening frame and closing frame of the video, and for the poster's 
 
 The CLUSTER stage detects an overall mood from the media. That mood inflects how every caption is written, regardless of which voice (A–E) is active. Think of mood as the colour temperature of the voice — it doesn't change what the voice says, but how it says it.
 
-Mood vocabulary is drawn from the user's `MEMORY_BOOK_TASTE.md` field `mood_vocabulary`. These five are the defaults.
+Mood vocabulary is drawn from the user's `DARKROOM_TASTE.md` field `mood_vocabulary`. These five are the defaults.
 
 ### Warm
 

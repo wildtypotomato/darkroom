@@ -1,6 +1,6 @@
 """Render the Wrapped poster (HTML + Jinja2) to a print-quality A3 PDF.
 
-The template lives at ``memory_book/templates/wrapped/poster.html`` and is
+The template lives at ``darkroom/templates/wrapped/poster.html`` and is
 treated as immutable: we only inject data and run headless Chromium.
 """
 

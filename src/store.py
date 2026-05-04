@@ -1,4 +1,4 @@
-"""SQLite asset store for Memory Book.
+"""SQLite asset store for Darkroom.
 
 Stdlib sqlite3 only — no ORM. Tables: assets, scenes, artifacts.
 Schema is intentionally narrow; richer joins are computed in Python.
@@ -48,11 +48,11 @@ class ArtifactManifest(TypedDict, total=False):
 
 
 def home() -> Path:
-    return Path(os.environ.get("MEMORY_BOOK_HOME", str(Path.home() / ".memory_book")))
+    return Path(os.environ.get("DARKROOM_HOME", str(Path.home() / ".darkroom")))
 
 
 def _db_path() -> Path:
-    return home() / "memory_book.db"
+    return home() / "darkroom.db"
 
 
 @contextmanager
