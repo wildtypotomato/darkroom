@@ -42,6 +42,12 @@ cd templates/wrapped/video && npm install
 playwright install chromium
 ```
 
+### Update
+
+```bash
+cd ~/.hermes/skills/darkroom && git pull
+```
+
 ## Environment Variables
 
 | Variable | Purpose | Required |
