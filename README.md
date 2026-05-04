@@ -46,10 +46,9 @@ playwright install chromium
 
 | Variable | Purpose | Required |
 |----------|---------|----------|
-| `SUNO_API_KEY` | Music generation | No (falls back to bundled ambient audio) |
 | `DARKROOM_HOME` | Data directory | No (defaults to `~/.darkroom`) |
 
-Vision captioning and critique run through Hermes `delegate_task` -- no separate API key needed.
+No API keys needed. Vision captioning and critique run through Hermes `delegate_task`. Background music is selected from three bundled ambient tracks based on detected mood.
 
 **Stub modes** for testing without API calls:
 - `DARKROOM_VISION_STUB=1` -- returns placeholder captions
@@ -87,7 +86,7 @@ RECALL --> CLUSTER --> +--> CAPTION --+
 
 **CLUSTER** -- Group assets by EXIF date, location, and visual similarity (CLIP embeddings with colour-histogram fallback). Each cluster becomes a scene. Discard duplicates and low-signal assets.
 
-**CAPTION / SCORE** -- Two parallel sub-agents via Hermes `delegate_task`. Captions (one per scene, via vision model) and a 30-second music bed (Suno with ambient fallback) generated concurrently. Off Hermes, falls back to sequential execution.
+**CAPTION / SCORE** -- Two parallel sub-agents via Hermes `delegate_task`. Captions (one per scene, via vision model) and background music (selected from bundled ambient tracks by mood) generated concurrently. Off Hermes, falls back to sequential execution.
 
 **COMPOSE** -- Merge caption scenes, score, and asset references into a render manifest. Resolves style, grid, typography, and palette from taste file and flags.
 
@@ -137,7 +136,7 @@ darkroom/
     cluster.py              # CLIP/histogram clustering
     caption.py              # Vision captioning
     narrative.py            # Intro/closing/stats generation
-    music.py                # Suno + ambient fallback
+    music.py                # Ambient track selection
     render_pdf.py           # HTML --> PDF via Playwright
     render_video.py         # Remotion --> MP4
     deliver.py              # Telegram delivery + cron

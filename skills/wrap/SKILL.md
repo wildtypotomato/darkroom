@@ -69,7 +69,7 @@ Write captions per scene using Hermes 4 vision. Captions follow `DARKROOM_TASTE.
 **Output:** Scene list with titles, captions, moods, and hero asset IDs.
 
 #### SCORE
-Generate a 30-second music bed. Hits Suno API for custom generation keyed to detected mood; falls back to bundled ambient beds if `SUNO_API_KEY` is absent.
+Pick background music from three bundled ambient tracks (warm, melancholy, upbeat) based on the dominant mood detected from scenes. Loop/trim to 30 seconds with ffmpeg.
 
 **Module:** `darkroom.src.music`
 **Output:** Audio file path (MP3).

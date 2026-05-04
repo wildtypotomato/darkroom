@@ -1,10 +1,8 @@
-"""Tests for music score generation (Suno + ambient fallback)."""
+"""Tests for ambient music selection and trimming."""
 from __future__ import annotations
 
-import os
 import subprocess
 from pathlib import Path
-from unittest import mock
 
 import pytest
 
@@ -20,36 +18,28 @@ def _duration(path: str) -> float:
     return float(out.stdout.strip())
 
 
-def test_empty_key_uses_fallback(tmp_path, monkeypatch, capsys):
-    monkeypatch.setenv("SUNO_API_KEY", "")
+def test_warm_mood_produces_correct_duration(tmp_path):
     out = tmp_path / "score.mp3"
-
     result = music.generate_score("warm", 5, str(out))
-
     assert result == str(out)
     assert out.exists() and out.stat().st_size > 0
     assert abs(_duration(str(out)) - 5) < 0.5
 
 
-def test_suno_error_falls_back_to_ambient(tmp_path, monkeypatch, capsys):
-    monkeypatch.setenv("SUNO_API_KEY", "fake-key")
+def test_melancholy_mood_uses_melancholy_track(tmp_path, capsys):
     out = tmp_path / "score.mp3"
-
-    with mock.patch.object(music, "_suno", side_effect=RuntimeError("boom")):
-        result = music.generate_score("melancholy", 4, str(out))
-
+    music.generate_score("melancholy", 4, str(out))
     captured = capsys.readouterr()
-    assert "[music] suno failed" in captured.out
-    assert "ambient/" in captured.out
-    assert result == str(out)
+    assert "melancholy.mp3" in captured.out
     assert out.exists()
     assert abs(_duration(str(out)) - 4) < 0.5
 
 
-def test_unknown_mood_defaults_to_warm(tmp_path, monkeypatch):
-    monkeypatch.setenv("SUNO_API_KEY", "")
+def test_unknown_mood_defaults_to_warm(tmp_path, capsys):
     out = tmp_path / "score.mp3"
     result = music.generate_score("nonexistent_mood", 3, str(out))
+    captured = capsys.readouterr()
+    assert "warm.mp3" in captured.out
     assert Path(result).exists()
     assert abs(_duration(result) - 3) < 0.5
 

@@ -52,7 +52,6 @@ def env(monkeypatch, tmp_path):
     monkeypatch.setenv("DARKROOM_VISION_STUB", "1")
     monkeypatch.setenv("DARKROOM_EMBED_FALLBACK", "1")
     monkeypatch.setenv("DARKROOM_RENDER_STUB", "1")
-    monkeypatch.setenv("SUNO_API_KEY", "")  # force ambient fallback
 
     # Reload modules so module-level paths re-evaluate against the tempdir.
     import darkroom.src.store as store

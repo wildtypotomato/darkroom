@@ -1,6 +1,6 @@
 # Ambient beds
 
-Three mood beds used as fallback when Suno is unavailable:
+Three mood beds selected based on the dominant mood detected from scenes:
 
 - `warm.mp3` — A3+E4 pad with light reverb
 - `melancholy.mp3` — G3+A#3 pad with longer reverb

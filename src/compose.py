@@ -3,7 +3,7 @@
 Fans out three children via Hermes' ``delegate_task``:
 
   1. ``cluster_and_caption``  — group assets, caption each scene with Hermes 4
-  2. ``generate_score``       — produce a 30s music bed (Suno → ambient)
+  2. ``generate_score``       — pick a 30s ambient track by mood
   3. ``render`` (after #1)    — PDF poster + 1080x1920 MP4
 
 Children 1 and 2 run in parallel; #3 starts the moment #1 returns. Music
