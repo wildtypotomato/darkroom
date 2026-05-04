@@ -3,7 +3,7 @@
 Fans out three children via Hermes' ``delegate_task``:
 
   1. ``cluster_and_caption``  — group assets, caption each scene with Hermes 4
-  2. ``generate_score``       — pick a 30s ambient track by mood
+  2. ``generate_score``       — pick a 30s music track by mood
   3. ``render`` (after #1)    — PDF poster + 1080x1920 MP4
 
 Children 1 and 2 run in parallel; #3 starts the moment #1 returns. Music
@@ -380,7 +380,7 @@ def _run_sequential(
         )
     print(f"[compose] child caption done in {time.monotonic() - t0:.1f}s")
 
-    # Child 2: music. Mood = most common across scenes; map to ambient bed.
+    # Child 2: music. Mood = most common across scenes.
     t1 = time.monotonic()
     score_mood = _ambient_mood_from_scenes(scenes)
     music_mod.generate_score(score_mood, SCORE_DURATION_SEC, score_path)

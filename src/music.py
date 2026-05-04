@@ -1,8 +1,8 @@
 """Mood-aware background music selection.
 
-Picks from three bundled royalty-free ambient tracks (warm, melancholy, upbeat)
-based on the dominant mood detected from the scenes. Loops/trims to the
-requested duration with ffmpeg.
+Picks from three bundled tracks (warm, melancholy, upbeat) based on the
+dominant mood detected from the scenes. Loops/trims to the requested
+duration with ffmpeg.
 """
 
 from __future__ import annotations
@@ -26,13 +26,13 @@ def generate_score(mood: str, duration_sec: int, out_path: str) -> str:
         bed = AMBIENT / f"{DEFAULT_MOOD}.mp3"
     if not bed.exists():
         msg = (
-            f"No ambient audio files found in {AMBIENT}. "
+            f"No music files found in {AMBIENT}. "
             f"Place warm.mp3, melancholy.mp3, or upbeat.mp3 in that directory."
         )
         print(f"[music] ERROR: {msg}")
         raise RuntimeError(msg) from None
 
-    print(f"[music] using ambient/{bed.name}")
+    print(f"[music] using {bed.name}")
 
     try:
         subprocess.run(
@@ -58,7 +58,7 @@ def generate_score(mood: str, duration_sec: int, out_path: str) -> str:
             "ffmpeg is required for music generation but was not found on PATH"
         ) from None
     except subprocess.TimeoutExpired:
-        raise RuntimeError("ffmpeg timed out while generating ambient score") from None
+        raise RuntimeError("ffmpeg timed out while trimming music") from None
     return out_path
 
 

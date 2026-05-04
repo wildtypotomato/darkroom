@@ -14,7 +14,7 @@ argument-hint: [wrap · teach · critique · reset · schedule]
 - ffmpeg
 - Node.js 18+ (video rendering — `npm install` runs automatically on first use)
 - Playwright (`playwright install chromium`)
-- Three bundled ambient tracks (warm, melancholy, upbeat) are selected based on detected mood
+- Three bundled music tracks (warm, melancholy, upbeat) are selected based on detected mood
 
 ## When to use
 
@@ -57,7 +57,7 @@ RECALL → CLUSTER → ┬→ CAPTION ─┐
 
 **CLUSTER** — Group assets by EXIF date, location, and semantic similarity. Each cluster becomes a scene. Discard duplicates and low-signal assets.
 
-**CAPTION / SCORE** — Two parallel sub-agents via `delegate_task`. Captions (one per scene, via Hermes 4 vision) and background music (selected from bundled ambient tracks by mood) generated concurrently.
+**CAPTION / SCORE** — Two parallel sub-agents via `delegate_task`. Captions (one per scene, via Hermes 4 vision) and background music (selected from bundled tracks by mood) generated concurrently.
 
 **COMPOSE** — Merge caption scenes, score, and asset references into a render manifest. Resolves style, grid, typography, palette from taste file + flags.
 

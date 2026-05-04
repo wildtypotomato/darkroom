@@ -54,7 +54,7 @@ cd ~/.hermes/skills/darkroom && git pull
 |----------|---------|----------|
 | `DARKROOM_HOME` | Data directory | No (defaults to `~/.darkroom`) |
 
-No API keys needed. Vision captioning and critique run through Hermes `delegate_task`. Background music is selected from three bundled ambient tracks based on detected mood.
+No API keys needed. Vision captioning and critique run through Hermes `delegate_task`. Background music is selected from three bundled tracks based on detected mood.
 
 **Stub modes** for testing without API calls:
 - `DARKROOM_VISION_STUB=1` -- returns placeholder captions
@@ -92,7 +92,7 @@ RECALL --> CLUSTER --> +--> CAPTION --+
 
 **CLUSTER** -- Group assets by EXIF date, location, and visual similarity (CLIP embeddings with colour-histogram fallback). Each cluster becomes a scene. Discard duplicates and low-signal assets.
 
-**CAPTION / SCORE** -- Two parallel sub-agents via Hermes `delegate_task`. Captions (one per scene, via vision model) and background music (selected from bundled ambient tracks by mood) generated concurrently. Off Hermes, falls back to sequential execution.
+**CAPTION / SCORE** -- Two parallel sub-agents via Hermes `delegate_task`. Captions (one per scene, via vision model) and background music (selected from bundled tracks by mood) generated concurrently. Off Hermes, falls back to sequential execution.
 
 **COMPOSE** -- Merge caption scenes, score, and asset references into a render manifest. Resolves style, grid, typography, and palette from taste file and flags.
 

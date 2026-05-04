@@ -1,4 +1,4 @@
-"""Tests for ambient music selection and trimming."""
+"""Tests for music selection and trimming."""
 from __future__ import annotations
 
 import subprocess
@@ -44,7 +44,7 @@ def test_unknown_mood_defaults_to_warm(tmp_path, capsys):
     assert abs(_duration(result) - 3) < 0.5
 
 
-def test_ambient_beds_present():
+def test_music_tracks_present():
     base = Path(music.__file__).resolve().parent.parent / "assets" / "ambient"
     for mood in ("warm", "melancholy", "upbeat"):
         assert (base / f"{mood}.mp3").exists(), f"missing {mood}.mp3"
